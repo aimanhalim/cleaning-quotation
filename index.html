@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotation Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .total-price {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e9f7df;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #155724;
+    }
+
+    .price-number {
+      display: inline-block;
+      animation: easeIn 0.3s ease-in;
+    }
+
+    @keyframes easeIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quotation Generator</h1>
+    <label for="serviceType">Service Type:</label>
+    <select id="serviceType">
+      <option value="basic">Basic Cleaning</option>
+      <option value="deep">Deep Cleaning</option>
+      <option value="move">Move-In/Out Cleaning</option>
+    </select>
+
+    <label for="distance">Distance from Your Location (km):</label>
+    <input type="number" id="distance" placeholder="Enter distance" min="0">
+
+    <label for="rooms">Number of Rooms:</label>
+    <input type="number" id="rooms" placeholder="Enter number of rooms" min="1">
+
+    <label>
+      <input type="checkbox" id="addCleaningProducts"> Include Cleaning Products (Add RM15)
+    </label>
+
+    <button onclick="generateQuote()">Generate Quote</button>
+
+    <div id="totalPrice" class="total-price">Total Price: <span id="priceNumber" class="price-number">RM0</span></div>
+  </div>
+
+  <script>
+    function generateQuote() {
+      const serviceType = document.getElementById('serviceType').value;
+      const distance = parseFloat(document.getElementById('distance').value) || 0;
+      const rooms = parseInt(document.getElementById('rooms').value) || 1;
+      const addCleaningProducts = document.getElementById('addCleaningProducts').checked;
+
+      let basePrice;
+      if (serviceType === 'basic') {
+        basePrice = 150;
+      } else if (serviceType === 'deep') {
+        basePrice = 200;
+      } else if (serviceType === 'move') {
+        basePrice = 180;
+      }
+
+      const distanceCost = distance * 1; // RM1 per km
+      const extraRoomCost = rooms > 3 ? (rooms - 3) * 30 : 0; // RM30 per extra room
+      const cleaningProductCost = addCleaningProducts ? 15 : 0;
+
+      const totalPrice = basePrice + distanceCost + extraRoomCost + cleaningProductCost;
+
+      const priceNumber = document.getElementById('priceNumber');
+      priceNumber.textContent = `RM${totalPrice.toFixed(2)}`;
+
+      // Trigger animation by resetting the element
+      priceNumber.style.animation = 'none'; // Reset animation
+      void priceNumber.offsetWidth; // Trigger reflow
+      priceNumber.style.animation = ''; // Reapply animation
+    }
+  </script>
+</body>
+</html>
+
